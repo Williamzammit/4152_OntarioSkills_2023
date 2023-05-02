@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveBaseConstants;
 
 public class DriveBase extends SubsystemBase {
@@ -19,6 +20,8 @@ public class DriveBase extends SubsystemBase {
   CANSparkMax rightDrive = new CANSparkMax(DriveBaseConstants.rightDriveMotor, MotorType.kBrushless);
 
   DifferentialDrive drive = new DifferentialDrive(leftDrive, rightDrive);
+
+  public static double acceleration = 0.0;
 
   /** Creates a new DriveBase. */
   public DriveBase() {
@@ -33,6 +36,8 @@ public class DriveBase extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    
+
   }
 
   public void arcadeDrive(double throttle, double rotation){
@@ -40,7 +45,8 @@ public class DriveBase extends SubsystemBase {
 
     SmartDashboard.putNumber("Throttle", throttle);
     SmartDashboard.putNumber("Rotation", rotation);
-    drive.arcadeDrive(throttle, rotation);
+    drive.arcadeDrive(throttle, 
+                      rotation);
   }
 
   public void brake(boolean brakeState){
@@ -53,4 +59,29 @@ public class DriveBase extends SubsystemBase {
     }
 
   }
+
+  public double applyDriveDeadband(double value){
+
+    if (value < 0.01){
+      if(value < -0.01){
+        return value;
+      }
+      else {
+        acceleration = 0.0;
+        return 0.0;
+
+      }
+    } else{
+      return value;
+    }
+  }
+
+  /*public double applyAcceleration(double value){
+    if (!(acceleration >= value)){
+      return value;
+    }
+      acceleration += 0.01;
+      return value*acceleration;
+  }*/
+
 }

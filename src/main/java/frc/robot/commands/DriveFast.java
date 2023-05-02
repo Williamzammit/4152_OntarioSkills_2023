@@ -5,16 +5,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Shooter;
+import frc.robot.Constants;
 
-public class StopShooter extends CommandBase {
-  Shooter shooter;
-
-  /** Creates a new StopShooter. */
-  public StopShooter(Shooter shooter) {
-    this.shooter = shooter;
+public class DriveFast extends CommandBase {
+  /** Creates a new DriveFast. */
+  public DriveFast() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooter);
+
   }
 
   // Called when the command is initially scheduled.
@@ -24,12 +21,14 @@ public class StopShooter extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.shoot(0.0);
+    Constants.DriveBaseConstants.throttleMaxSpeed = 0.8;
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    Constants.DriveBaseConstants.throttleMaxSpeed = 0.45;
+  }
 
   // Returns true when the command should end.
   @Override

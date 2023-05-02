@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Shooter extends SubsystemBase {
 
+
+
   VictorSP shooterMotor = new VictorSP(0);
 
   /** Creates a new Shooter. */
@@ -19,6 +21,7 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
   }
 
   public void shoot(double shooterSpeed){

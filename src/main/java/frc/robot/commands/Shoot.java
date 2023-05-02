@@ -22,7 +22,7 @@ public class Shoot extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.shoot(0.40);
+    shooter.shoot(value);
 
   }
 
@@ -35,6 +35,7 @@ public class Shoot extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    shooter.shoot(0.0);
   }
 
   // Returns true when the command should end.

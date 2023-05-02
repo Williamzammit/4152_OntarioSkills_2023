@@ -5,8 +5,9 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.DriveFast;
 import frc.robot.commands.DriveWithJoystick;
-import frc.robot.commands.Load;
+import frc.robot.commands.Jostle;
 import frc.robot.commands.LoadAndLaunch;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.Shoot;
@@ -15,7 +16,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Loader;
 import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ProxyCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -42,9 +43,9 @@ public class RobotContainer {
   public RobotContainer() {
 
 
-    drivebase.setDefaultCommand(new DriveWithJoystick(drivebase, () -> xboxC.getLeftY(), ()-> xboxC.getLeftX()));
-    
+    drivebase.setDefaultCommand(new DriveWithJoystick(drivebase, () -> xboxC.getLeftY(), ()-> xboxC.getRightX()));
 
+    
     // Configure the trigger bindings
     configureBindings();
   }
@@ -63,12 +64,14 @@ public class RobotContainer {
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    Trigger intakeButton = xboxC.x();
-    Trigger shootButton = xboxC.a();
+    Trigger intakeButton = xboxC.rightTrigger();
+    Trigger shootButton = xboxC.x();
 
-    intakeButton.whileTrue(new RunIntake(intake, 0.35));
-    shootButton.onTrue(new LoadAndLaunch(loader, shooter, 0.25, 0.40));
-    xboxC.y().whileTrue(new Shoot(shooter, 0.40));
+    intakeButton.whileTrue(new RunIntake(intake, 0.50));
+    shootButton.whileTrue(new LoadAndLaunch(loader, shooter, 0.27, 0.30));
+    xboxC.rightBumper().whileTrue(new Shoot(shooter, 0.30));
+    xboxC.leftTrigger().whileTrue(new DriveFast());
+    xboxC.y().whileTrue(new RepeatCommand(new Jostle(drivebase)));
   }
 
   /**

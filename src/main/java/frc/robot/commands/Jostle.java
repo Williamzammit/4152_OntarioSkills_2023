@@ -4,31 +4,28 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.subsystems.Loader;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.DriveBase;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class LoadAndLaunch extends SequentialCommandGroup {
-  /** Creates a new LoadAndLaunch. */
-  public LoadAndLaunch(Loader loader, Shooter shooter, double position, double speed) {
+public class Jostle extends SequentialCommandGroup {
+  /** Creates a new Jostle. */
+  public Jostle(DriveBase drivebase) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-
     addCommands(
-      new ParallelCommandGroup(
-        new Shoot(shooter, speed),
-        new SequentialCommandGroup(
-          new WaitCommand(1.15),
-          new Load(loader, position)
-        )
+      new ParallelRaceGroup(
+        new JostleDrive(drivebase, ()-> 0.0, ()-> 0.45),
+        new WaitCommand(0.35)
+      ),
+      new ParallelRaceGroup(
+        new JostleDrive(drivebase, ()-> 0.0, ()-> -0.45),
+        new WaitCommand(0.35)
       )
     );
-
   }
 }
